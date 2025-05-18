@@ -94,6 +94,7 @@ from zerver.lib.users import (
 )
 from zerver.lib.validator import check_widget_content
 from zerver.lib.widget import do_widget_post_save_actions
+from zerver.lib.message_delivery import create_initial_delivery_status
 from zerver.models import (
     Client,
     Message,
@@ -261,7 +262,7 @@ def get_recipient_info(
             # A topic participant is anyone who either sent or reacted to messages in the topic.
             # It is expensive to call `participants_for_topic` if the topic has a large number
             # of messages. But it is fine to call it here, as this gets called only if the message
-            # has syntax that might be a @topic mention without having confirmed the syntax isn't, say,
+            # has syntax that might be a @topic mention without having confirmed the syntax isn't, say,
             # in a code block.
             topic_participant_user_ids = participants_for_topic(
                 realm_id, recipient.id, stream_topic.topic_name
@@ -876,6 +877,11 @@ def do_send_messages(
     user_message_flags: dict[int, dict[int, list[str]]] = defaultdict(dict)
 
     Message.objects.bulk_create(send_request.message for send_request in send_message_requests)
+
+    # Create delivery status records for each message
+    for send_request in send_message_requests:
+        recipients = UserProfile.objects.filter(id__in=send_request.um_eligible_user_ids)
+        create_initial_delivery_status(send_request.message, list(recipients))
 
     # Claim attachments in message
     for send_request in send_message_requests:

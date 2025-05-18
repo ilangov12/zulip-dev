@@ -256,6 +256,7 @@ from zerver.views.video_calls import (
 )
 from zerver.views.zephyr import webathena_kerberos_login
 from zproject import dev_urls
+from zerver.views import message_delivery
 
 if settings.TWO_FACTOR_AUTHENTICATION_ENABLED:  # nocoverage
     from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
@@ -554,6 +555,8 @@ v1_api_and_json_patterns = [
     rest_path("export/realm", POST=export_realm, GET=get_realm_exports),
     rest_path("export/realm/<int:export_id>", DELETE=delete_realm_export),
     rest_path("export/realm/consents", GET=get_users_export_consents),
+    # message_delivery -> zerver.views.message_delivery
+    rest_path("messages/<int:message_id>/delivery_status", POST=message_delivery.update_message_delivery_status),
 ]
 
 integrations_view = IntegrationView.as_view()

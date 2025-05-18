@@ -21,6 +21,7 @@ const call_response_schema = z.object({
 export function update_audio_and_video_chat_button_display(): void {
     update_audio_chat_button_display();
     update_video_chat_button_display();
+    update_click_to_call_button_display();
 }
 
 export function update_video_chat_button_display(): void {
@@ -33,6 +34,12 @@ export function update_audio_chat_button_display(): void {
     const show_audio_chat_button = compose_call.compute_show_audio_chat_button();
     $(".compose-control-buttons-container .audio_link").toggle(show_audio_chat_button);
     $(".message-edit-feature-group .audio_link").toggle(show_audio_chat_button);
+}
+
+export function update_click_to_call_button_display(): void {
+    const show_click_to_call_button = compose_call.compute_show_video_chat_button();
+    $(".compose-control-buttons-container .click_to_call").toggle(show_click_to_call_button);
+    $(".message-edit-feature-group .click_to_call").toggle(show_click_to_call_button);
 }
 
 function insert_video_call_url(url: string, $target_textarea: JQuery<HTMLTextAreaElement>): void {
@@ -174,4 +181,15 @@ export function generate_and_insert_audio_or_video_call_link(
             );
         }
     }
+}
+
+export function initialize(): void {
+    $(".compose-control-buttons-container").on("click", ".click_to_call", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const $target_textarea = $("#compose-textarea");
+        const video_call_id = util.random_int(100000000000000, 999999999999999);
+        const video_call_link = compose_call.get_jitsi_server_url() + "/" + video_call_id;
+        insert_video_call_url(video_call_link + "#config.startWithVideoMuted=true", $target_textarea);
+    });
 }
