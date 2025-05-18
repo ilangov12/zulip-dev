@@ -2321,7 +2321,15 @@ class AzureADAuthBackend(SocialAuthMixin, AzureADOAuth2):
     sort_order = 50
     name = "azuread-oauth2"
     auth_backend_name = "AzureAD"
-    display_icon = staticfiles_storage.url("images/authentication_backends/azuread-icon.png")
+    
+    def get_display_icon(self) -> Optional[str]:
+        try:
+            return staticfiles_storage.url("images/authentication_backends/azuread-icon.png")
+        except (ValueError, FileNotFoundError, OSError):
+            # Gracefully handle missing icon file or other storage-related errors
+            return None
+
+    display_icon = property(get_display_icon)
 
     available_for_cloud_plans = [
         Realm.PLAN_TYPE_STANDARD,
@@ -2335,7 +2343,15 @@ class GitLabAuthBackend(SocialAuthMixin, GitLabOAuth2):
     sort_order = 75
     name = "gitlab"
     auth_backend_name = "GitLab"
-    display_icon = staticfiles_storage.url("images/authentication_backends/gitlab-icon.png")
+    
+    def get_display_icon(self) -> Optional[str]:
+        try:
+            return staticfiles_storage.url("images/authentication_backends/gitlab-icon.png")
+        except (ValueError, FileNotFoundError, OSError):
+            # Gracefully handle missing icon file or other storage-related errors
+            return None
+
+    display_icon = property(get_display_icon)
 
     # Note: GitLab as of early 2020 supports having multiple email
     # addresses connected with a GitLab account, and we could access
@@ -2351,7 +2367,15 @@ class GoogleAuthBackend(SocialAuthMixin, GoogleOAuth2):
     sort_order = 150
     auth_backend_name = "Google"
     name = "google"
-    display_icon = staticfiles_storage.url("images/authentication_backends/googl_e-icon.png")
+    
+    def get_display_icon(self) -> Optional[str]:
+        try:
+            return staticfiles_storage.url("images/authentication_backends/googl_e-icon.png")
+        except (ValueError, FileNotFoundError, OSError):
+            # Gracefully handle missing icon file or other storage-related errors
+            return None
+
+    display_icon = property(get_display_icon)
 
     def get_verified_emails(self, *args: Any, **kwargs: Any) -> list[str]:
         verified_emails: list[str] = []
@@ -2382,7 +2406,15 @@ class AppleAuthBackend(SocialAuthMixin, AppleIdAuth):
     sort_order = 10
     name = "apple"
     auth_backend_name = "Apple"
-    display_icon = staticfiles_storage.url("images/authentication_backends/apple-icon.png")
+    
+    def get_display_icon(self) -> Optional[str]:
+        try:
+            return staticfiles_storage.url("images/authentication_backends/apple-icon.png")
+        except (ValueError, FileNotFoundError, OSError):
+            # Gracefully handle missing icon file or other storage-related errors
+            return None
+
+    display_icon = property(get_display_icon)
 
     # Apple only sends `name` in its response the first time a user
     # tries to sign up, so we won't have it in consecutive attempts.
