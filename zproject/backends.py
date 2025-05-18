@@ -2206,7 +2206,8 @@ class GitHubAuthBackend(SocialAuthMixin, GithubOAuth2):
     auth_backend_name = "GitHub"
     sort_order = 100
 
-    settings_dict = settings.SOCIAL_AUTH_GITHUB_SETTINGS
+    # Handle missing settings gracefully with a default empty dict
+    settings_dict = getattr(settings, 'SOCIAL_AUTH_GITHUB_SETTINGS', {})
 
     def get_display_icon(self) -> Optional[str]:
         try:
