@@ -140,7 +140,11 @@ class Integration:
 
     def get_logo_url(self) -> str | None:
         if self.logo_path is not None:
-            return staticfiles_storage.url(self.logo_path)
+            try:
+                return staticfiles_storage.url(self.logo_path)
+            except (ValueError, FileNotFoundError, OSError):
+                # Gracefully handle missing logo files
+                return None
 
         return None
 
@@ -174,9 +178,17 @@ class BotIntegration(Integration):
             self.logo_url = self.get_logo_url()
             if self.logo_url is None:
                 # TODO: Add a test for this by initializing one in a test.
-                logo = staticfiles_storage.url(self.ZULIP_LOGO_STATIC_PATH_PNG)  # nocoverage
+                try:
+                    logo = staticfiles_storage.url(self.ZULIP_LOGO_STATIC_PATH_PNG)  # nocoverage
+                except (ValueError, FileNotFoundError, OSError):
+                    # Gracefully handle missing logo files
+                    logo = None
         else:
-            self.logo_url = staticfiles_storage.url(logo)
+            try:
+                self.logo_url = staticfiles_storage.url(logo)
+            except (ValueError, FileNotFoundError, OSError):
+                # Gracefully handle missing logo files
+                self.logo_url = None
 
         if display_name is None:
             display_name = f"{name.title()} Bot"  # nocoverage
