@@ -18,7 +18,7 @@ import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from email.headerregistry import Address
-from typing import Any, TypedDict, TypeVar, cast
+from typing import Any, TypedDict, TypeVar, cast, Optional
 from urllib.parse import urlencode
 
 import magic
@@ -2205,7 +2205,16 @@ class GitHubAuthBackend(SocialAuthMixin, GithubOAuth2):
     name = "github"
     auth_backend_name = "GitHub"
     sort_order = 100
-    display_icon = staticfiles_storage.url("images/authentication_backends/github-icon.png")
+
+    settings_dict = settings.SOCIAL_AUTH_GITHUB_SETTINGS
+
+    def get_display_icon(self) -> Optional[str]:
+        try:
+            return staticfiles_storage.url("images/authentication_backends/github-icon.png")
+        except ValueError:
+            return None
+
+    display_icon = property(get_display_icon)
 
     def get_all_associated_email_objects(self, *args: Any, **kwargs: Any) -> list[dict[str, Any]]:
         access_token = kwargs["response"]["access_token"]
