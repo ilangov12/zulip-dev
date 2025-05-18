@@ -384,7 +384,11 @@ class EmbeddedBotIntegration(Integration):
     def __init__(self, name: str, *args: Any, **kwargs: Any) -> None:
         assert kwargs.get("client_name") is None
         kwargs["client_name"] = self.DEFAULT_CLIENT_NAME.format(name=name.title())
-        super().__init__(name, *args, **kwargs)
+        try:
+            super().__init__(name, *args, **kwargs)
+        except (ValueError, FileNotFoundError, OSError):
+            # Handle errors from missing static files
+            self.logo_url = None
 
 
 EMBEDDED_BOTS: list[EmbeddedBotIntegration] = [
