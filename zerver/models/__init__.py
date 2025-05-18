@@ -12,6 +12,7 @@ from zerver.models.groups import NamedUserGroup as NamedUserGroup
 from zerver.models.groups import UserGroup as UserGroup
 from zerver.models.groups import UserGroupMembership as UserGroupMembership
 from zerver.models.linkifiers import RealmFilter as RealmFilter
+from zerver.models.message_delivery import MessageDeliveryStatus as MessageDeliveryStatus
 from zerver.models.messages import AbstractAttachment as AbstractAttachment
 from zerver.models.messages import AbstractEmoji as AbstractEmoji
 from zerver.models.messages import AbstractMessage as AbstractMessage
