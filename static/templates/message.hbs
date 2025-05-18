@@ -1,0 +1,37 @@
+{{#include_msgs}}
+    <div class="message_row{{^is_stream}} private-message{{/is_stream}}{{#include_sender}} include-sender{{/include_sender}}{{#is_mentioned}} is-mentioned{{/is_mentioned}}{{#mentioned_me_directly}} mentioned-me-directly{{/mentioned_me_directly}}{{#collapse}} collapsible{{/collapse}}{{#me_message}} is-me-message{{/me_message}}" id="{{msg/id}}"{{#if wants_redo}}
+    data-wants-redo="true"{{/if}}>
+        <div class="messagebox{{^include_sender}} prev_is_same_sender{{/include_sender}}{{#include_next_line_same_sender}} next_is_same_sender{{/include_next_line_same_sender}}{{#has_star}} starred-message{{/has_star}}{{#is_local_echo}} local{{/is_local_echo}}{{#is_hidden}} hidden-message{{/is_hidden}}{{#is_edit}} edit-convert-me{{/is_edit}}{{#is_inline_subscribing}} inline-subscribe{{/is_inline_subscribing}}{{#is_me_message}} is-me-message{{/is_me_message}} {{#if status}}{{status}}{{/if}}"
+        data-message-id="{{msg/id}}">
+            <!-- Rest of the message template -->
+            
+            <!-- Add delivery status indicators at the bottom of the message -->
+            {{#if msg/delivery_status}}
+            <div class="message-delivery-status">
+                {{#if msg/is_delivered}}
+                <span class="delivery-status delivered" title="{{t 'Delivered' }}">
+                    <i class="fa fa-check"></i><i class="fa fa-check"></i>
+                </span>
+                {{else if msg/is_sent}}
+                <span class="delivery-status sent" title="{{t 'Sent' }}">
+                    <i class="fa fa-check"></i>
+                </span>
+                {{/if}}
+                
+                {{#if msg/is_read}}
+                <span class="delivery-status read" title="{{t 'Read' }}">
+                    <i class="fa fa-check read-check"></i><i class="fa fa-check read-check"></i>
+                </span>
+                {{/if}}
+            </div>
+            {{/if}}
+            
+            <!-- Add deleted message indicator -->
+            {{#if msg/is_deleted}}
+            <div class="message-deleted-indicator">
+                <i class="fa fa-times"></i> {{t 'This message was deleted' }}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+{{/include_msgs}} 

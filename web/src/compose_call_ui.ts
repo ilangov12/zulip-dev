@@ -190,6 +190,16 @@ export function initialize(): void {
         const $target_textarea = $("#compose-textarea");
         const video_call_id = util.random_int(100000000000000, 999999999999999);
         const video_call_link = compose_call.get_jitsi_server_url() + "/" + video_call_id;
-        insert_video_call_url(video_call_link + "#config.startWithVideoMuted=true", $target_textarea);
+        
+        // Insert video call URL into the textarea
+        insert_video_call_url(video_call_link + "#config.startWithVideoMuted=false", $target_textarea);
+        
+        // Automatically open the Jitsi call in a new window
+        window.open(video_call_link, '_blank');
+        
+        // Automatically send the message with the call link
+        setTimeout(() => {
+            $("form#send_message_form").submit();
+        }, 100);
     });
 }

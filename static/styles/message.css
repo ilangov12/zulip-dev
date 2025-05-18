@@ -1,0 +1,44 @@
+/* WhatsApp-style message delivery status indicators */
+.message-delivery-status {
+    display: inline-block;
+    float: right;
+    margin-left: 5px;
+    font-size: 0.8em;
+    color: #555;
+}
+
+.delivery-status.sent i.fa-check {
+    color: #999;
+}
+
+.delivery-status.delivered i.fa-check {
+    color: #5588dd;
+}
+
+.delivery-status.read i.fa-check.read-check {
+    color: #2196F3;
+}
+
+.delivery-status i.fa-check {
+    margin-left: -3px;
+}
+
+.delivery-status i.fa-check:first-child {
+    margin-left: 0;
+}
+
+/* Deleted message indicator */
+.message-deleted-indicator {
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-style: italic;
+    color: #666;
+    display: inline-block;
+}
+
+.message-deleted-indicator i.fa-times {
+    margin-right: 5px;
+    color: #888;
+} 

@@ -75,7 +75,6 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5:!RC4;
     ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 
     # Logs

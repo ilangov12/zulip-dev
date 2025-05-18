@@ -7,12 +7,12 @@ from zerver.models import Message, UserProfile
 from zerver.models.message_delivery import MessageDeliveryStatus
 
 @typed_endpoint
+@require_post
+@authenticated_json_view
 def update_message_delivery_status(
     request: HttpRequest,
     user_profile: UserProfile,
-    *,
     message_id: int,
-    status: int,
 ) -> HttpResponse:
     """Update the delivery status of a message for the current user."""
     try:
@@ -20,17 +20,20 @@ def update_message_delivery_status(
     except Message.DoesNotExist:
         return json_success({"result": "error", "msg": _("Message not found")})
 
+    status = int(request.POST.get("status", 1))
+    
     try:
-        delivery_status = MessageDeliveryStatus.objects.get(
+        delivery_status, created = MessageDeliveryStatus.objects.get_or_create(
             message=message,
-            recipient=user_profile
+            recipient=user_profile,
+            defaults={"status": status}
         )
-    except MessageDeliveryStatus.DoesNotExist:
-        return json_success({"result": "error", "msg": _("Delivery status not found")})
+        
+        if not created and status > delivery_status.status:
+            delivery_status.status = status
+            delivery_status.save()
+            
+    except Exception as e:
+        return json_success({"result": "error", "msg": str(e)})
 
-    if status not in dict(MessageDeliveryStatus.DeliveryStatus.choices):
-        return json_success({"result": "error", "msg": _("Invalid status")})
-
-    delivery_status.status = status
-    delivery_status.save()
     return json_success({"result": "success"}) 
