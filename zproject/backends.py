@@ -2211,7 +2211,8 @@ class GitHubAuthBackend(SocialAuthMixin, GithubOAuth2):
     def get_display_icon(self) -> Optional[str]:
         try:
             return staticfiles_storage.url("images/authentication_backends/github-icon.png")
-        except ValueError:
+        except (ValueError, FileNotFoundError, OSError):
+            # Gracefully handle missing icon file or other storage-related errors
             return None
 
     display_icon = property(get_display_icon)

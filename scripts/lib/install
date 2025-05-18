@@ -706,7 +706,8 @@ cp -rT "$deploy_path"/prod-static/serve /home/zulip/prod-static
 chown -R zulip:zulip /home/zulip /var/log/zulip /etc/zulip/settings.py
 
 if ! [ -e /home/zulip/deployments/current/zulip-git-version ]; then
-    mkdir /srv/zulip.git
+    # Use the dedicated script to handle creating /srv/zulip.git safely
+"$ZULIP_PATH/scripts/lib/install-zulip-git.sh"
     chown zulip:zulip /srv/zulip.git
     su zulip -c 'git clone --bare --mirror /home/zulip/deployments/current /srv/zulip.git'
     su zulip -c 'cd /home/zulip/deployments/current && ./scripts/lib/update-git-upstream && ./tools/cache-zulip-git-version'
