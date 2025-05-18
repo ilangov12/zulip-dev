@@ -1,6 +1,8 @@
 from typing import List
 from django.db import transaction
-from zerver.models import Message, MessageDeliveryStatus, UserProfile
+from zerver.models.messages import Message
+from zerver.models.users import UserProfile
+from zerver.models.message_delivery import MessageDeliveryStatus
 
 def create_initial_delivery_status(message: Message, recipients: List[UserProfile]) -> None:
     """Create initial delivery status records for a message and its recipients."""
