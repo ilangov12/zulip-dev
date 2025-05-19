@@ -12,6 +12,7 @@ from zerver.models.message_delivery import MessageDeliveryStatus
 def update_message_delivery_status(
     request: HttpRequest,
     user_profile: UserProfile,
+    *,
     message_id: int,
 ) -> HttpResponse:
     """Update the delivery status of a message for the current user."""
